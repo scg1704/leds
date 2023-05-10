@@ -6,10 +6,7 @@ import co.edu.umanizales.leds.service.ListDEService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/leds")
@@ -34,6 +31,41 @@ public class ListDEController {
     public ResponseEntity<ResponseDTO> addToStart(@RequestBody Led led){
         listDEService.getLeds().addToStart(led);
         return new ResponseEntity<>(new ResponseDTO(200, "The led has been added", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/oneledon")
+    public ResponseEntity<ResponseDTO> oneLedOn(@PathVariable int id){
+        listDEService.getLeds().oneLedOn(id);
+        return new ResponseEntity<>(new ResponseDTO(200, "The led is on", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/oneledoff")
+    public ResponseEntity<ResponseDTO> oneLedOff(@PathVariable int id){
+        listDEService.getLeds().oneLedOff(id);
+        return new ResponseEntity<>(new ResponseDTO(200, "The led is off", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/allledson")
+    public ResponseEntity<ResponseDTO> allLedsOn(){
+        listDEService.getLeds().allLedsOn();
+        return new ResponseEntity<>(new ResponseDTO(200, "All leds are on", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/allledsoff")
+    public ResponseEntity<ResponseDTO> allLedsOff(){
+        listDEService.getLeds().allLedsOff();
+        return new ResponseEntity<>(new ResponseDTO(200, "All leds are off", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/middleleds")
+    public ResponseEntity<ResponseDTO> middleLeds(){
+        listDEService.getLeds().midLeds();
+        return new ResponseEntity<>(new ResponseDTO(200, "The leds in the middle are:", null),
                 HttpStatus.OK);
     }
 }
