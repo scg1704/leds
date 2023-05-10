@@ -65,7 +65,7 @@ public class ListDEController {
     @GetMapping(path="/middleleds")
     public ResponseEntity<ResponseDTO> middleLeds(){
         listDEService.getLeds().midLeds();
-        return new ResponseEntity<>(new ResponseDTO(200, "The leds in the middle are:", null),
+        return new ResponseEntity<>(new ResponseDTO(200, "Leds in the middle identified", null),
                 HttpStatus.OK);
     }
 }
