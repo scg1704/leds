@@ -62,10 +62,28 @@ public class ListDEController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(path="/middleleds")
-    public ResponseEntity<ResponseDTO> middleLeds(){
-        listDEService.getLeds().midLeds();
-        return new ResponseEntity<>(new ResponseDTO(200, "Leds in the middle identified", null),
+    @GetMapping(path="/simplerestart")
+    public ResponseEntity<ResponseDTO> simpleRestart(){
+        listDEService.getLeds().simpleRestart();
+        return new ResponseEntity<>(new ResponseDTO(200, "Leds are rebooted", null),
                 HttpStatus.OK);
+    }
+    @GetMapping(path="/sleep")
+    public ResponseEntity<ResponseDTO> sleep(){
+        listDEService.getLeds().sleep();
+        return new ResponseEntity<>(new ResponseDTO(200, "Sleep have been used on leds", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/turnlightshalf")
+    public ResponseEntity<ResponseDTO> turnLightsByHalf(){
+        try{
+            listDEService.getLeds().turnLightsByHalf();
+        }catch (InterruptedException e){
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(new ResponseDTO(200, "Lights are on by that order", null),
+                HttpStatus.OK);
+
     }
 }

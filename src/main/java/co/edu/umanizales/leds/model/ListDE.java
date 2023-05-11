@@ -1,6 +1,10 @@
 package co.edu.umanizales.leds.model;
 
 import lombok.Data;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 public class ListDE {
@@ -165,7 +169,7 @@ public class ListDE {
         Llamamos a otro ayudante que se va a situar también en la cabeza
         Se recorre la lista. El primer ayudante avanza un nodo a la vez, y el segundo avanza dos nodos a la vez
             El primer ayudante se encuentra en la mitad de la lista
-            El segundo ayudante se encuentra al final de la lista
+            El segundo ayudante se encuentra al final de la lista. Si salta 2, y no hay 2, nada más va a saltar 1
         La lista es par?
         SI
             Le decimos que nos imprima el nodo donde se encuentra, y el siguiente
@@ -184,10 +188,169 @@ public class ListDE {
                 temp2 = temp2.getNext().getNext();
             }
             if (size % 2 == 0){
-                System.out.println((temp.getData().getId()) + (temp.getNext().getData().getId()));
+                temp.getData().getId();
+                temp.getNext().getData().getId();
             }
             else{
-                System.out.println((temp.getNext().getData().getId()));
+                temp.getNext().getData().getId();
+            }
+        }
+    }
+
+    /*
+    LÓGICA MÉTODO REINICIAR NORMAL
+    Tenemos datos?
+    SI
+        Le decimos a todos los leds que se apaguen
+        Le decimos a todos los leds que se enciendan
+     */
+    public void simpleRestart(){
+        if (head != null){
+            allLedsOff();
+            allLedsOn();
+        }
+    }
+    /*
+    LÓGICA MÉTODO SLEEP
+    Tiene datos?
+    SI
+        Llamamos un ayudante
+        Recorremos la lista
+            Nos paramos en un nodo
+            Le decimos que encienda el led, y guarde el tiempo
+            Le decimos que apague el led, y guarde el tiempo
+            Vamos al siguiente nodo y repetimos el mismo proceso en toda la lista
+     */
+    public void sleep(){
+        if (head != null){
+            NodeDE temp = head;
+            while (temp != null){
+                temp.getData().setStatus(true);
+                temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                try{
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                temp.getData().setStatus(false);
+                temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
+                try{
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                temp = temp.getNext();
+            }
+        }
+    }
+
+    /*
+    Después de un análisis me di cuenta que para realizar el ejercicio propuesto me queda un poco complicado reutilizar algunos de los métodos
+    que realicé con anterioridad ya que hay ciertas cosas que cambian y necesitan una mayor complejidad. Aún así los voy a dejar ya que nos pueden
+    ayudar en futuras ocasiones.
+
+    NOTA: El método sleep me sirve como una gran base para
+     */
+
+    /*
+    LÓGICA MÉTODO LUCES ENCENDER Y APAGAR DESDE LA MITAD:
+    Tenemos datos?
+    SI
+        Termina en número par la lista?
+        SI
+            Sacamos la mitad
+            Creamos una variable que toma el número de pasos
+            Llamamos a un ayudante
+            Recorremos la lista
+                Decimos que el número de pasos a dar sea igual a la mitad, y al siguiente
+                    Establecemos que los leds se encendieron y tomamos el tiempo
+                    Llamamos a otro ayudante que se va devolver
+                    Recorremos la lista
+                        Decimos que se encienda, y se apague despues de 1 segundo a cada nodo
+                Aumentamos el número de pasos, y pasamos al siguiente nodo para saber si posee las condiciones
+        NO
+            Sacamos la mitad y le sumamos 1
+            Creamos una variable que toma el número de pasos
+            Llamamos a un ayudante
+            Recorremos la lista
+                Decimos que los pasos recorridos vayan hasta la mitad
+                Encendemos el led y tomamos el tiempo
+                Llamamos al otro ayudante que se va a devolver
+                Recorremos la lista
+                        Decimos que se encienda, y se apague despues de 1 segundo a cada nodo
+                Aumentamos el número de pasos, y pasamos al siguiente nodo para saber si posee las condiciones
+     */
+
+    public void turnLightsByHalf() throws InterruptedException{
+        if (head != null){
+            if (size % 2 == 0){
+                int mid = (size/2);
+                int steps = 1;
+                NodeDE temp = head;
+
+                while (temp != null){
+                    if (steps == (mid+1)){
+                        temp.getData().setStatus(true);
+                        temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
+
+                        NodeDE temp2 = temp.getPrev();
+                        temp2.getData().setStatus(true);
+                        temp2.getData().setDateOn(LocalTime.from(LocalTime.now()));
+
+                        if (temp.getNext() != null){
+                            while (temp.getNext() != null){
+                                Thread.sleep(1000);
+                                temp.getData().setStatus(false);
+                                temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
+
+                                temp2.getData().setStatus(false);
+                                temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
+
+                                temp = temp.getNext();
+                                temp.getData().setStatus(true);
+                                temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
+
+                                temp2 = temp.getNext();
+                                temp2.getData().setStatus(true);
+                                temp2.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                            }
+                        }
+                    }
+                    steps++;
+                    temp = temp.getNext();
+                }
+            }
+            else{
+                int mid = (size/2)+1;
+                int steps = 1;
+                NodeDE temp = head;
+                while (temp != null){
+                    if (steps == mid){
+                        temp.getData().setStatus(true);
+                        temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                        NodeDE temp2 = temp;
+                        if (temp.getNext() != null){
+                            Thread.sleep(1000);
+                            temp.getData().setStatus(false);
+                            temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
+
+                            temp2.getData().setStatus(false);
+                            temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
+
+                            temp = temp.getNext();
+                            temp.getData().setStatus(true);
+                            temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
+
+                            temp2 = temp.getNext();
+                            temp2.getData().setStatus(true);
+                            temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
+                        }
+                    }
+                }
+                steps++;
+                temp = temp.getNext();
             }
         }
     }
