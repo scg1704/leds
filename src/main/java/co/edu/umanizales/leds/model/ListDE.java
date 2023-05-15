@@ -5,11 +5,14 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ListDE {
     private NodeDE head;
     private int size;
+    private List<Led> leds = new ArrayList<>();
 
     /*
     LÓGICA MÉTODO AÑADIR:
@@ -28,6 +31,23 @@ public class ListDE {
             newLed.setPrev(temp);
         }
         size++;
+    }
+
+    /*
+    LÓGICA MÉTODO PARA IMPRIMIR LA LISTA:
+    Llamamos a la lista de leds
+    Le decimos que si tiene elementos pase por toda la lista con ayuda de un temporal y los añada
+     */
+    public List<Led> print (){
+        leds.clear();
+        if (head != null){
+            NodeDE temp = head;
+            while (temp != null){
+                leds.add(temp.getData());
+                temp =temp.getNext();
+            }
+        }
+        return leds;
     }
 
     /*

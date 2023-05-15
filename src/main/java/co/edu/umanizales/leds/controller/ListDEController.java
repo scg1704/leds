@@ -16,7 +16,7 @@ public class ListDEController {
 
     @GetMapping
     public ResponseEntity<ResponseDTO> getLeds(){
-        return new ResponseEntity<>(new ResponseDTO(200, listDEService.getLeds().getHead(), null),
+        return new ResponseEntity<>(new ResponseDTO(200, listDEService.getLeds().print(), null),
                 HttpStatus.OK);
     }
 
