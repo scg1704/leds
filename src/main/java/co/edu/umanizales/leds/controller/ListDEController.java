@@ -29,14 +29,14 @@ public class ListDEController {
 
     }
 
-    @GetMapping(path="/addtoend")
+    @PostMapping(path="/addtoend/{id}")
     public ResponseEntity<ResponseDTO> addToEnd(@PathVariable int id){
-        listDEService.getLeds().addToEnd(new Led(id, false));
+        listDEService.getLeds().addToEnd(new Led(id,false));
         return new ResponseEntity<>(new ResponseDTO(200, "The led has been added", null),
                 HttpStatus.OK);
     }
 
-    @GetMapping(path="/addtostart")
+    @PostMapping(path="/addtostart/{id}")
     public ResponseEntity<ResponseDTO> addToStart(@PathVariable int id){
         listDEService.getLeds().addToStart(new Led(id, false));
         return new ResponseEntity<>(new ResponseDTO(200, "The led has been added", null),
