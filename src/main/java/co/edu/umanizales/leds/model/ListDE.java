@@ -12,6 +12,25 @@ public class ListDE {
     private int size;
 
     /*
+    LÓGICA MÉTODO AÑADIR:
+    Hacemos lo mismo que en añadir al final
+     */
+    public void addLed(Led led) {
+        if (head == null) {
+            head = new NodeDE(led);
+        } else {
+            NodeDE newLed = new NodeDE(led);
+            NodeDE temp = head;
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
+            }
+            temp.setNext(newLed);
+            newLed.setPrev(temp);
+        }
+        size++;
+    }
+
+    /*
     LÓGICA AÑADIR AL FINAL:
     Entrada:
     El led con los datos que le queremos añadir

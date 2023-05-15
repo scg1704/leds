@@ -20,6 +20,15 @@ public class ListDEController {
                 HttpStatus.OK);
     }
 
+    @PostMapping(path = "/add/{id}")
+    public ResponseEntity<ResponseDTO> addLed(@PathVariable int id){
+
+        listDEService.getLeds().addLed(new Led(id,false));
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "Led was added", null), HttpStatus.OK);
+
+    }
+
     @GetMapping(path="/addtoend")
     public ResponseEntity<ResponseDTO> addToEnd(@PathVariable int id){
         listDEService.getLeds().addToEnd(new Led(id, false));
