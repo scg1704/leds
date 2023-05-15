@@ -12,4 +12,9 @@ public class Led {
     private boolean status;
     private LocalTime dateOn;
     private LocalTime dateOff;
+
+    public Led (int id, boolean status){
+        this.id = id;
+        this.status = status;
+    }
 }

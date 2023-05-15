@@ -21,15 +21,15 @@ public class ListDEController {
     }
 
     @GetMapping(path="/addtoend")
-    public ResponseEntity<ResponseDTO> addToEnd(@RequestBody Led led){
-        listDEService.getLeds().addToEnd(led);
+    public ResponseEntity<ResponseDTO> addToEnd(@PathVariable int id){
+        listDEService.getLeds().addToEnd(new Led(id, false));
         return new ResponseEntity<>(new ResponseDTO(200, "The led has been added", null),
                 HttpStatus.OK);
     }
 
     @GetMapping(path="/addtostart")
-    public ResponseEntity<ResponseDTO> addToStart(@RequestBody Led led){
-        listDEService.getLeds().addToStart(led);
+    public ResponseEntity<ResponseDTO> addToStart(@PathVariable int id){
+        listDEService.getLeds().addToStart(new Led(id, false));
         return new ResponseEntity<>(new ResponseDTO(200, "The led has been added", null),
                 HttpStatus.OK);
     }
