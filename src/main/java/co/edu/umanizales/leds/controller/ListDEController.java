@@ -43,17 +43,24 @@ public class ListDEController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(path="/oneledon")
+    @GetMapping(path="/oneledon/{id}")
     public ResponseEntity<ResponseDTO> oneLedOn(@PathVariable int id){
         listDEService.getLeds().oneLedOn(id);
         return new ResponseEntity<>(new ResponseDTO(200, "The led is on", null),
                 HttpStatus.OK);
     }
 
-    @GetMapping(path="/oneledoff")
+    @GetMapping(path="/oneledoff/{id}")
     public ResponseEntity<ResponseDTO> oneLedOff(@PathVariable int id){
         listDEService.getLeds().oneLedOff(id);
         return new ResponseEntity<>(new ResponseDTO(200, "The led is off", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path="/midleds")
+    public ResponseEntity<ResponseDTO> midLeds(){
+        listDEService.getLeds().midLeds();
+        return new ResponseEntity<>(new ResponseDTO(200, "Extremes are on", null),
                 HttpStatus.OK);
     }
 
@@ -86,13 +93,8 @@ public class ListDEController {
 
     @GetMapping(path = "/turnlightshalf")
     public ResponseEntity<ResponseDTO> turnLightsByHalf(){
-        try{
-            listDEService.getLeds().turnLightsByHalf();
-        }catch (InterruptedException e){
-            throw new RuntimeException(e);
-        }
-        return new ResponseEntity<>(new ResponseDTO(200, "Lights are on by that order", null),
+        listDEService.getLeds().turnLightsHalf();
+        return new ResponseEntity<>(new ResponseDTO(200, "Lights are on in the indicated way", null),
                 HttpStatus.OK);
-
     }
 }

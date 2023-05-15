@@ -18,17 +18,18 @@ public class ListDE {
     LÓGICA MÉTODO AÑADIR:
     Hacemos lo mismo que en añadir al final
      */
+
     public void addLed(Led led) {
         if (head == null) {
             head = new NodeDE(led);
         } else {
-            NodeDE newLed = new NodeDE(led);
-            NodeDE temp = head;
-            while (temp.getNext() != null) {
-                temp = temp.getNext();
+            NodeDE newNode = new NodeDE(led);
+            NodeDE current = head;
+            while (current.getNext() != null) {
+                current = current.getNext();
             }
-            temp.setNext(newLed);
-            newLed.setPrev(temp);
+            current.setNext(newNode);
+            newNode.setPrev(current);
         }
         size++;
     }
@@ -38,7 +39,8 @@ public class ListDE {
     Llamamos a la lista de leds
     Le decimos que si tiene elementos pase por toda la lista con ayuda de un temporal y los añada
      */
-    public List<Led> print (){
+
+    public List <Led> print (){
         leds.clear();
         if (head != null){
             NodeDE temp = head;
@@ -118,9 +120,7 @@ public class ListDE {
     Tenemos datos en la cabeza?
     SI
         Llamamos a un ayudante
-        Recorremos todos los datos de la lista
-        El dato coincide con la entrada?
-        SI
+        Recorremos la lista hasta llegar al dato que coincide con la entrada
             Decimos que está encendido
      */
 
@@ -128,10 +128,10 @@ public class ListDE {
         if (head != null){
             NodeDE temp = this.head;
             while (temp != null){
-                temp = temp.getNext();
-            }
-            if (temp.getNext().getData().getId() == id){
-                temp.getData().setStatus(true);
+                if (temp.getData().getId() == id){
+                    temp.getData().setStatus(true);
+                    break;
+                }
             }
         }
     }
@@ -145,19 +145,18 @@ public class ListDE {
     SI
         Llamamos a un ayudante
         Recorremos todos los datos de la lista
-        El dato coincide con la entrada?
-        SI
-            Decimos que está apagado
+        Recorremos la lista hasta llegar al dato que coincide con la entrada
+            Decimos que está encendido
      */
 
     public void oneLedOff (int id){
         if (head != null){
             NodeDE temp = this.head;
             while (temp != null){
-                temp = temp.getNext();
-            }
-            if (temp.getNext().getData().getId() == id){
-                temp.getData().setStatus(false);
+                if (temp.getData().getId() == id){
+                    temp.getData().setStatus(false);
+                    break;
+                }
             }
         }
     }
@@ -182,7 +181,7 @@ public class ListDE {
     }
 
     /*
-    LÓGICA ENCENDER TODOS LOS LEDS
+    LÓGICA APAGAR TODOS LOS LEDS
     Tenemos datos en la cabeza?
     SI
         Llamamos a un ayudante que se posiciona en la cabeza
@@ -211,11 +210,9 @@ public class ListDE {
             El segundo ayudante se encuentra al final de la lista. Si salta 2, y no hay 2, nada más va a saltar 1
         La lista es par?
         SI
-            Le decimos que nos imprima el nodo donde se encuentra, y el siguiente
+            Le decimos que los nodos de la mitad se enciendan
         NO
-            Le decimos que imprima el nodo siguiente
-
-     NOTA: Este método va a ser FUNDAMENTAL a futuro.
+            Le decimos que el nodo de la mitad se encienda
      */
 
     public void midLeds(){
@@ -227,11 +224,11 @@ public class ListDE {
                 temp2 = temp2.getNext().getNext();
             }
             if (size % 2 == 0){
-                temp.getData().getId();
-                temp.getNext().getData().getId();
+                temp.getData().setStatus(true);
+                temp.getNext().getData().setStatus(true);
             }
             else{
-                temp.getNext().getData().getId();
+                temp.getData().setStatus(true);
             }
         }
     }
@@ -243,6 +240,7 @@ public class ListDE {
         Le decimos a todos los leds que se apaguen
         Le decimos a todos los leds que se enciendan
      */
+
     public void simpleRestart(){
         if (head != null){
             allLedsOff();
@@ -261,6 +259,7 @@ public class ListDE {
             Le decimos que apague el led, y guarde el tiempo
             Vamos al siguiente nodo y repetimos el mismo proceso en toda la lista
      */
+
     public void sleep(){
         if (head != null){
             NodeDE temp = head;
@@ -323,75 +322,88 @@ public class ListDE {
                 Aumentamos el número de pasos, y pasamos al siguiente nodo para saber si posee las condiciones
      */
 
-    public void turnLightsByHalf() throws InterruptedException{
-        if (head != null){
-            if (size % 2 == 0){
-                int mid = (size/2);
-                int steps = 1;
-                NodeDE temp = head;
+    public  void turnLightsHalf(){
+        if (head != null) {
+            NodeDE temp = head;
+            int pasos = 1;
+            int medium;
+            if ((size%2) != 0){
+                medium = (size/2) + 1;
+                while (temp!= null){
 
-                while (temp != null){
-                    if (steps == (mid+1)){
+                    if (pasos == medium){
+                        NodeDE tempNext = temp;
                         temp.getData().setStatus(true);
-                        temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                        temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
 
-                        NodeDE temp2 = temp.getPrev();
-                        temp2.getData().setStatus(true);
-                        temp2.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                        while (tempNext.getNext() != null){
 
-                        if (temp.getNext() != null){
-                            while (temp.getNext() != null){
+                            try {
                                 Thread.sleep(1000);
-                                temp.getData().setStatus(false);
-                                temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
-
-                                temp2.getData().setStatus(false);
-                                temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
-
-                                temp = temp.getNext();
-                                temp.getData().setStatus(true);
-                                temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
-
-                                temp2 = temp.getNext();
-                                temp2.getData().setStatus(true);
-                                temp2.getData().setDateOn(LocalTime.from(LocalTime.now()));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        }
-                    }
-                    steps++;
-                    temp = temp.getNext();
-                }
-            }
-            else{
-                int mid = (size/2)+1;
-                int steps = 1;
-                NodeDE temp = head;
-                while (temp != null){
-                    if (steps == mid){
-                        temp.getData().setStatus(true);
-                        temp.getData().setDateOn(LocalTime.from(LocalTime.now()));
-                        NodeDE temp2 = temp;
-                        if (temp.getNext() != null){
-                            Thread.sleep(1000);
+
                             temp.getData().setStatus(false);
-                            temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
+                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setStatus(false);
+                            tempNext.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
 
-                            temp2.getData().setStatus(false);
-                            temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
+                            temp = temp.getPrev();
+                            tempNext= tempNext.getNext();
 
-                            temp = temp.getNext();
                             temp.getData().setStatus(true);
-                            temp.getData().setDateOff(LocalTime.from(LocalTime.now()));
-
-                            temp2 = temp.getNext();
-                            temp2.getData().setStatus(true);
-                            temp2.getData().setDateOff(LocalTime.from(LocalTime.now()));
+                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setStatus(true);
+                            tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
                         }
                     }
+                    pasos++;
+                    temp= temp.getNext();
                 }
-                steps++;
-                temp = temp.getNext();
+            } else
+            {
+                medium = size/2;
+                while (temp!= null){
+                    if (pasos == medium){
+                        NodeDE tempNext = temp.getNext();
+                        temp.getData().setStatus(true);
+                        temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                        tempNext.getData().setStatus(true);
+                        tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+                        while (tempNext.getNext() != null) {
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            temp.getData().setStatus(false);
+                            temp.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setStatus(false);
+                            tempNext.getData().setDateOff(LocalTime.from(LocalDateTime.now()));
+
+                            temp = temp.getPrev();
+                            tempNext = tempNext.getNext();
+
+                            temp.getData().setStatus(true);
+                            temp.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+                            tempNext.getData().setStatus(true);
+                            tempNext.getData().setDateOn(LocalTime.from(LocalDateTime.now()));
+
+
+                        }
+                    }
+                    pasos++;
+                    temp= temp.getNext();
+
+                }
+
             }
+
         }
+
     }
 }
